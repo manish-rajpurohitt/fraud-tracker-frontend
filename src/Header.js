@@ -1,33 +1,180 @@
-import { Button, Toolbar, IconButton, Typography, makeStyles, AppBar } from "@material-ui/core";
-import React from "react";
-import { Link } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  makeStyles,
+  Button,
+  IconButton,
+  Drawer,
+  Link,
+  MenuItem,
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import React, { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
+const headersData = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "Search Fraud",
+    href: "/SearchFraud",
+  },
+  {
+    label: "Submit Fraud",
+    href: "/SubmitFraud",
+  }
+];
+
+const useStyles = makeStyles(() => ({
+  header: {
+    backgroundColor: "#400CCC",
+    paddingRight: "79px",
+    paddingLeft: "118px",
+    "@media (max-width: 900px)": {
+      paddingLeft: 0,
     },
-    title: {
-      flexGrow: 1
-    },
-  }));
+  },
+  logo: {
+    fontFamily: "Work Sans, sans-serif",
+    fontWeight: 600,
+    color: "#FFFEFE",
+    textAlign: "left",
+  },
+  menuButton: {
+    fontFamily: "Open Sans, sans-serif",
+    fontWeight: 700,
+    size: "18px",
+    marginLeft: "38px",
+  },
+  toolbar: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  drawerContainer: {
+    padding: "20px 30px",
+  },
+}));
 
-export default function Header(){
-     const classes = useStyles();
+export default function Header() {
+  const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
-    return(
-        <><nav>
-            <AppBar position="static">
-            <Toolbar>
-                <Link to="/" variant="h6" underLineNone className={classes.title}>
-                <h1>Online Fraud/Scam Tracker</h1>
-                </Link>
-                <Link to="/"><Button color="inherit"><h3>Home</h3></Button></Link>
-                <Link to="/SearchFraud"><Button color="inherit"><h3>Search Fraud activities</h3></Button></Link>
-                <Link to="/SubmitFraud"><Button color="inherit"><h3>Submit a Fraud activity</h3></Button></Link>
+  const [state, setState] = useState({
+    mobileView: false,
+    drawerOpen: false,
+  });
 
-            </Toolbar>
-            </AppBar>
-        
-    </nav></>
-    )
+  const { mobileView, drawerOpen } = state;
+
+  useEffect(() => {
+    const setResponsiveness = () => {
+      return window.innerWidth < 900
+        ? setState((prevState) => ({ ...prevState, mobileView: true }))
+        : setState((prevState) => ({ ...prevState, mobileView: false }));
+    };
+
+    setResponsiveness();
+
+    window.addEventListener("resize", () => setResponsiveness());
+
+    return () => {
+      window.removeEventListener("resize", () => setResponsiveness());
+    };
+  }, []);
+
+  const displayDesktop = () => {
+    return (
+      <Toolbar className={toolbar}>
+        {femmecubatorLogo}
+        <div>{getMenuButtons()}</div>
+      </Toolbar>
+    );
+  };
+
+  const displayMobile = () => {
+    const handleDrawerOpen = () =>
+      setState((prevState) => ({ ...prevState, drawerOpen: true }));
+    const handleDrawerClose = () =>
+      setState((prevState) => ({ ...prevState, drawerOpen: false }));
+
+    return (
+      <Toolbar>
+        <IconButton
+          {...{
+            edge: "start",
+            color: "inherit",
+            "aria-label": "menu",
+            "aria-haspopup": "true",
+            onClick: handleDrawerOpen,
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        <Drawer
+          {...{
+            anchor: "left",
+            open: drawerOpen,
+            onClose: handleDrawerClose,
+          }}
+        >
+          <div className={drawerContainer}>{getDrawerChoices()}</div>
+        </Drawer>
+
+        <div>{femmecubatorLogo}</div>
+      </Toolbar>
+    );
+  };
+
+  const getDrawerChoices = () => {
+    return headersData.map(({ label, href }) => {
+      return (
+        <Link
+          {...{
+            component: RouterLink,
+            to: href,
+            color: "inherit",
+            style: { textDecoration: "none" },
+            key: label,
+          }}
+        >
+          <MenuItem>{label}</MenuItem>
+        </Link>
+      );
+    });
+  };
+
+  const femmecubatorLogo = (
+    <Typography variant="h6" component="h1" className={logo}>
+      <a href="/">Online Fraud Tracker</a>
+    </Typography>
+  );
+
+  const getMenuButtons = () => {
+    return headersData.map(({ label, href }) => {
+      return (
+        <Button
+          {...{
+            key: label,
+            color: "inherit",
+            to: href,
+            component: RouterLink,
+            className: menuButton,
+          }}
+        >
+          {label}
+        </Button>
+      );
+    });
+  };
+
+  return (
+    <header>
+      <AppBar className={header}>
+        {mobileView ? displayMobile() : displayDesktop()}
+      </AppBar>
+    </header>
+  );
 }

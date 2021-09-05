@@ -166,7 +166,6 @@ export default function SubmitFraud(){
                 <TextField id="standard-basic" value={values.email} onChange={(e)=>{updateValues({...values,email:e.target.value})}} label="Scammer Email:" />
                 <p></p>
                 <Autocomplete
-                style={{margin:"5px"}}
                     id="combo-box-demo"
                     onChange={(e,val)=>updateValues({...values,  scamType:val})}
                     options={scamTypes}

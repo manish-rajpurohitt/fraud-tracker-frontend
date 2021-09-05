@@ -37,7 +37,7 @@ export default function SubmitFraud(){
     const [scamTypes, updateScamTypes] = React.useState([]);
     const [values, updateValues] = React.useState(initialState)
     const fetchScamTypes = async()=>{
-        const res = await fetch('http://localhost:3000/getAllScamTypes');
+        const res = await fetch('https://online-fraud-tracker.herokuapp.com/getAllScamTypes');
         const json = await res.json();
         if(json?.success){
           return json?.data[0].allscamtypes;
@@ -85,7 +85,7 @@ export default function SubmitFraud(){
             updateUploading({...uploading,status:false})
             axios({
                 method: 'post',
-                url: "http://localhost:3000/addScam",
+                url: "https://online-fraud-tracker.herokuapp.com/addScam",
                 headers: {}, 
                 data: {
                   values

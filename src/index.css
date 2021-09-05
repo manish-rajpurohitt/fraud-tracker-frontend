@@ -5,8 +5,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
 }
 
+.button-home > button{
+  margin:5px;
+  padding: 5px;
+  margin-bottom: 20px;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -27,23 +33,31 @@ code {
 
 }
 .SearchFraud{
-  margin: 10px;
-  
-}
-.scams-list{
-  width: 700px;
-  height: 430px;
-  border: 1px black solid;
+  display: flex;
+  height: 100%;
+
 }
 .search-fraud-container{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  margin : 20px;
+  
+}
+.scams-list{
+  width: 700px;
+flex-wrap: wrap;
+overflow-y: scroll;
+min-height: 200%;
+min-width: 60%;
+}
+.item{
+  font-weight: bold;
 }
 .form-control{
   display: flex;
   align-items: center;
-  justify-content: center;
+  width: 100%;
 }
 .form-control-sub{
   display: flex;
@@ -67,4 +81,10 @@ code {
 .sub-btn > button{
   margin: 3px;
   padding: 5px;;
+}
+
+@media (max-width: 900px) {
+    .SearchFraud{
+      flex-wrap: wrap
+    } 
 }

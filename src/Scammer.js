@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, CardContent, CardMedia, CardActions,IconButton,Collapse, Select,Typography, TextField, Button, makeStyles } from "@material-ui/core";
+import {Card, CardContent, CardMedia, CardActions,IconButton,Collapse,Typography, makeStyles } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import clsx from 'clsx';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export default function Scammer(props){
-    const scamdetails = props;
     const [expanded, setExpanded] = React.useState(false);
     const [scexpanded, setScExpanded] = React.useState(false);
     const classes = useStyles();

@@ -18,7 +18,7 @@ export default function SearchFraud(){
     
 
     const fetchScammersList = async ()=>{
-        const res = await fetch('http://localhost:3000/getAllScams');
+        const res = await fetch('https://online-fraud-tracker.herokuapp.com/getAllScams');
         const json = await res.json();
         if(json?.success){
           return json?.data;
@@ -40,7 +40,7 @@ export default function SearchFraud(){
     return (<>
       <h3>Search for Fraud/Scam</h3>
     <div className="SearchFraud" style={{height:"500px"}}>
-            <div className="search-fraud-container">
+            {/* <div className="search-fraud-container">
               <div className="form-cotrol">
                 <FormControl className={classes.formControl}>
                     <InputLabel id="demo-simple-select-label">Select Platform :</InputLabel>
@@ -66,7 +66,7 @@ export default function SearchFraud(){
                     <Button type="submit" variant="contained" color="primary" style={{marginTop:"10px"}} >Submit</Button>
                 </FormControl>
               </div>
-            </div>
+            </div> */}
             <div className="scams-list">
               <h2>Results</h2>
                   {listOfScammers.map(scammer=>{

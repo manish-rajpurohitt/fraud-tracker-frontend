@@ -1,7 +1,6 @@
 import React from "react";
 import { FormControl,Select,Button, MenuItem,TextField, InputLabel, makeStyles } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import UploadService from "./FileUpload-service";
 import validator  from "validator";
 import axios from "axios";
 
@@ -50,7 +49,6 @@ export default function SubmitFraud(){
 
     React.useEffect(()=>{
         fetchScamTypes().then(response => {
-            console.log(response)
             updateScamTypes(response);
           });
     },[])
@@ -72,7 +70,6 @@ export default function SubmitFraud(){
 	};
 
     const handleValidation = ()=>{
-        console.log(values);
         if(validator.isEmail(values.victimEmail) 
         && validator.isNumeric(values.fraudAmount)
         && !validator.isEmpty(platform) 
@@ -85,6 +82,7 @@ export default function SubmitFraud(){
     }
     const checkAndAddScam = ()=>{
         if(uploading.count === selectedFile.length){
+            updateUploading({...uploading,status:false})
             axios({
                 method: 'post',
                 url: "http://localhost:3000/addScam",
@@ -93,16 +91,18 @@ export default function SubmitFraud(){
                   values
                 }
               });
+              window.location.reload();
+        }else{
+            updateUploading({...uploading,status:true})
         }
     }
     const uploadImage = ()=>{
         for (let i = 0; i < selectedFile.length; i++) {
             const data = new FormData() 
             data.append('file', selectedFile[i]);
-            axios.post("http://localhost:3000/upload", data, { // receive two parameter endpoint url ,form data 
+            axios.post("https://online-fraud-tracker.herokuapp.com/upload", data, { // receive two parameter endpoint url ,form data 
             })
             .then(res => { // then print response status
-                console.log(res);
                 let screens = values.screenshots;
                 screens.push(res?.data?.url);
                 updateValues({...values, screenshots:screens});
@@ -115,6 +115,7 @@ export default function SubmitFraud(){
 
 
     const handleSubmit = ()=>{
+        updateUploading({...uploading,status:true})
         if(handleValidation()){
             if(isFilePicked){
                 uploadImage();
@@ -123,6 +124,7 @@ export default function SubmitFraud(){
             }
         }else{
             console.log("validation error")
+            updateUploading({...uploading,status:false})
         }
     }
 
@@ -182,9 +184,9 @@ export default function SubmitFraud(){
                 <p>Please attach screenshots if possible!!</p>
                 <input type="file"multiple  accept="image/*" name="file"  onChange={changeHandler} />
                 <div className="sub-btn">
-                <Button type="reset" variant="contained" onClick={()=>{updateValues(initialState)}} >Reset</Button>
+                <Button type="reset" disabled={uploading.status? true : false} variant="contained" onClick={()=>{updateValues(initialState)}} >Reset</Button>
                 </div>
-                <Button type="submit" variant="contained" color="primary" onClick={handleSubmit} style={{marginTop:"10px"}} >Submit</Button>
+                <Button type="submit" disabled={uploading.status? true : false} variant="contained" color="primary" onClick={handleSubmit} style={{marginTop:"10px"}} >Submit</Button>
             </div>
             </div>
             </FormControl>

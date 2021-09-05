@@ -1,11 +1,8 @@
 import React from 'react';
-import SubmitFraud from './SubmitFraud';
-import SearchFraud from './SearchFraud';
 import { Link } from 'react-router-dom';
 import {Button} from '@material-ui/core';
 
  function Home() {
-    const [searchFraud, updateSearchFraud] = React.useState(false);
     return (
       <div className="App">
         <h1>Online Fraud/ Scam Tracker</h1>
@@ -20,7 +17,7 @@ import {Button} from '@material-ui/core';
           <Link to="/SubmitFraud">Submit a Scam</Link>
             </Button>
         </div>
-        <img src="/temp.png" width="300px" />
+        <img src="/temp.png" alt="warningimage" width="300px" />
 
         </div>
       </div>
